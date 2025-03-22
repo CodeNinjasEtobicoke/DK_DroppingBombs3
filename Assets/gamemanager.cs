@@ -17,13 +17,18 @@ public class gamemanager : MonoBehaviour
     public TMP_Text scoreText;
     public int pointsWorth = 1;
     private int score;
+    private int bestScore = 0;
+    public TMP_Text bestScoreText;
+    private bool beatBestScore;
     private bool smokeCleared = true;
+
     private void Awake()
      
     {
         spawner = GameObject.Find("B-52").GetComponent<spawner>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         scoreText.enabled = false;
+        bestScoreText.enabled = false;
     }
 
     // Update is called once per frame
@@ -32,6 +37,7 @@ public class gamemanager : MonoBehaviour
         spawner.active = false;
         title.SetActive(true);
         splash.SetActive(false);
+        bestScore = PlayerPrefs.GetInt("bestScore");
     }
     private void Update()
     {
