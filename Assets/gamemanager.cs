@@ -17,11 +17,12 @@ public class gamemanager : MonoBehaviour
     public TMP_Text scoreText;
     public int pointsWorth = 1;
     private int score;
+    private bool smokeCleared = true;
     private int bestScore = 0;
     public TMP_Text bestScoreText;
     private bool beatBestScore;
-    private bool smokeCleared = true;
-
+    public Color normalColor;
+    public Color bestScoreColor;
     private void Awake()
      
     {
@@ -37,7 +38,8 @@ public class gamemanager : MonoBehaviour
         spawner.active = false;
         title.SetActive(true);
         splash.SetActive(false);
-        bestScore = PlayerPrefs.GetInt("bestScore");
+        bestScore = PlayerPrefs.GetInt("BestScore");
+        bestScoreText.text = "Best Score: " + bestScore.ToString();
     }
     private void Update()
     {
@@ -77,12 +79,14 @@ public class gamemanager : MonoBehaviour
     }
     void ResetGame()
     {
+        bestScoreText.color = normalColor;
         spawner.active = true;
         title.SetActive(false);
         scoreText.enabled = true;
         splash.SetActive(false);
         score = 0;
-        
+        beatBestScore = false;
+        bestScoreText.enabled = true;
         player = Instantiate(playerPrefab, new Vector3(0, 0, 0), playerPrefab.transform.rotation);
         gameStarted = true;
     }
@@ -92,6 +96,14 @@ public class gamemanager : MonoBehaviour
         gameStarted = false;
         splash.SetActive(true);
         Invoke("SplashScreen", 2);
+        if (score > bestScore)
+        {
+            bestScoreText.color = bestScoreColor;
+            bestScore = score;
+            PlayerPrefs.SetInt("BestScore", bestScore);
+            beatBestScore = true;
+            bestScoreText.text = "Best Score: " + bestScore.ToString();
+        }
     }
     void SplashScreen()
     {
